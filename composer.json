@@ -16,6 +16,11 @@
             "email"     : "salaros@salaros.com",
             "homepage"  : "http://salaros.com",
             "role"      : "Developer"
+        },
+        {
+            "name"      : "Paweł Sadowski",
+            "email"     : "psad73@gmail.com",            
+            "role"      : "small modifications"
         }
     ],
     "require": {
