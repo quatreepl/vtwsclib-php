@@ -307,7 +307,7 @@ class Entities
         );
         $result = $this->wsClient->invokeOperation('add_related', $postdata, 'POST');
         return $result;
-}
+    }
 
     public function getRelated($id, $relatedType = 'any')
     {
@@ -316,7 +316,7 @@ class Entities
             'id' => $id,
             'relatedType' => $relatedType,
         );
-        $result = $this->wsClient->invokeOperation('retrieve_related', $getdata, 'POST');
-        var_dump($result);
+        $result = $this->wsClient->invokeOperation('retrieve_related', $getdata, 'GET');
+        return $result; 
     }
 }
