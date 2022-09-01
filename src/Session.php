@@ -1,70 +1,64 @@
 <?php
 /**
-* Vtiger Web Services PHP Client Library
-*
-* The MIT License (MIT)
-*
-* Copyright (c) 2015, Zhmayev Yaroslav <salaros@salaros.com>
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*
-* @author    Zhmayev Yaroslav <salaros@salaros.com>
-* @copyright 2015-2016 Zhmayev Yaroslav
-* @license   The MIT License (MIT)
-*/
-
+ * Vtiger Web Services PHP Client Library
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015, Zhmayev Yaroslav <salaros@salaros.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @author    Zhmayev Yaroslav <salaros@salaros.com>
+ * @copyright 2015-2016 Zhmayev Yaroslav
+ * @license   The MIT License (MIT)
+ */
 namespace Salaros\Vtiger\VTWSCLib;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 /**
-* Vtiger Web Services PHP Client Session class
-*
-* Class Session
-* @package Salaros\Vtiger\VTWSCLib
-* @internal
-*/
+ * Vtiger Web Services PHP Client Session class
+ *
+ * Class Session
+ * @package Salaros\Vtiger\VTWSCLib
+ * @internal
+ */
 class Session
 {
+
     // HTTP Client instance
     protected $httpClient;
-
     // request timeout in seconds
     protected $requestTimeout;
-
     // Service URL to which client connects to
     protected $vtigerUrl = null;
     protected $wsBaseURL = null;
-
     // Vtiger CRM and WebServices API version
     private $vtigerApiVersion = '0.0';
     private $vtigerVersion = '0.0';
-    
     // Webservice login validity
     private $serviceExpireTime = null;
     private $serviceToken = null;
-
     // Webservice user credentials
     private $userName = null;
     private $accessKey = null;
-
     // Webservice login credentials
     private $userID = null;
     private $sessionName = null;
@@ -103,8 +97,8 @@ class Session
 
         $postdata = [
             'operation' => 'login',
-            'username'  => $username,
-            'accessKey' => md5($this->serviceToken.$accessKey)
+            'username' => $username,
+            'accessKey' => md5($this->serviceToken . $accessKey)
         ];
 
         $result = $this->sendHttpRequest($postdata);
@@ -117,12 +111,12 @@ class Session
         $this->accessKey = $accessKey;
 
         // Session data
-        $this->sessionName = $result[ 'sessionName' ];
-        $this->userID = $result[ 'userId' ];
+        $this->sessionName = $result['sessionName'];
+        $this->userID = $result['userId'];
 
         // Vtiger CRM and WebServices API version
-        $this->vtigerApiVersion = $result[ 'version' ];
-        $this->vtigerVersion = $result[ 'vtigerVersion' ];
+        $this->vtigerApiVersion = $result['version'];
+        $this->vtigerVersion = $result['vtigerVersion'];
 
         return true;
     }
@@ -153,9 +147,7 @@ class Session
             return false;
         }
 
-        $this->accessKey = array_key_exists('accesskey', $result)
-            ? $result[ 'accesskey' ]
-            : $result[ 0 ];
+        $this->accessKey = array_key_exists('accesskey', $result) ? $result['accesskey'] : $result[0];
 
         return $this->login($username, $accessKey);
     }
@@ -170,16 +162,16 @@ class Session
     {
         $getdata = [
             'operation' => 'getchallenge',
-            'username'  => $username
+            'username' => $username
         ];
         $result = $this->sendHttpRequest($getdata, 'GET');
-        
-        if (!is_array($result) || !isset($result[ 'token' ])) {
+
+        if (!is_array($result) || !isset($result['token'])) {
             return false;
         }
 
-        $this->serviceExpireTime = $result[ 'expireTime' ];
-        $this->serviceToken = $result[ 'token' ];
+        $this->serviceExpireTime = $result['expireTime'];
+        $this->serviceToken = $result['token'];
 
         return true;
     }
@@ -228,38 +220,36 @@ class Session
     public function sendHttpRequest(array $requestData, $method = 'POST')
     {
         // Perform re-login if required.
-        if ('getchallenge' !== $requestData[ 'operation' ] && time() > $this->serviceExpireTime) {
+        if ('getchallenge' !== $requestData['operation'] && time() > $this->serviceExpireTime) {
             $this->login($this->userName, $this->accessKey);
         }
 
-        $requestData[ 'sessionName' ] = $this->sessionName;
-        
+        $requestData['sessionName'] = $this->sessionName;
+
         try {
             switch ($method) {
                 case 'GET':
-                    $response = $this->httpClient->get($this->wsBaseURL, [ 'query' => $requestData, 'timeout' => $this->requestTimeout ]);
+                    $response = $this->httpClient->get($this->wsBaseURL, ['query' => $requestData, 'timeout' => $this->requestTimeout]);
                     break;
                 case 'POST':
-                    $response = $this->httpClient->post($this->wsBaseURL, [ 'form_params' => $requestData, 'timeout' => $this->requestTimeout ]);
+                    $response = $this->httpClient->post($this->wsBaseURL, ['form_params' => $requestData, 'timeout' => $this->requestTimeout]);
                     break;
                 default:
                     throw new WSException("Unsupported request type {$method}");
             }
         } catch (RequestException $ex) {
-            $urlFailed = $this->httpClient->getConfig('base_uri').$this->wsBaseURL;
+            $urlFailed = $this->httpClient->getConfig('base_uri') . $this->wsBaseURL;
             throw new WSException(
-                sprintf('Failed to execute %s call on "%s" URL', $method, $urlFailed),
-                'FAILED_SENDING_REQUEST',
-                $ex
+                    sprintf('Failed to execute %s call on "%s" URL', $method, $urlFailed),
+                    'FAILED_SENDING_REQUEST',
+                    $ex
             );
         }
 
         $jsonRaw = $response->getBody();
         $jsonObj = json_decode($jsonRaw, true);
 
-        $result = (is_array($jsonObj) && !self::checkForError($jsonObj))
-            ? $jsonObj[ 'result' ]
-            : null;
+        $result = (is_array($jsonObj) && !self::checkForError($jsonObj)) ? $jsonObj['result'] : null;
         return $result;
     }
 
@@ -291,15 +281,15 @@ class Session
      */
     private static function checkForError(array $jsonResult)
     {
-        if (isset($jsonResult[ 'success' ]) && true === (bool) $jsonResult[ 'success' ]) {
+        if (isset($jsonResult['success']) && true === (bool) $jsonResult['success']) {
             return false;
         }
 
-        if (isset($jsonResult[ 'error' ])) {
-            $error = $jsonResult[ 'error' ];
+        if (isset($jsonResult['error'])) {
+            $error = $jsonResult['error'];
             throw new WSException(
-                $error[ 'message' ],
-                $error[ 'code' ]
+                    $error['message'],
+                    $error['code']
             );
         }
 

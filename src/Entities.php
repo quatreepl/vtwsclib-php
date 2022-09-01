@@ -1,46 +1,46 @@
 <?php
 /**
-* Vtiger Web Services PHP Client Library
-*
-* The MIT License (MIT)
-*
-* Copyright (c) 2015, Zhmayev Yaroslav <salaros@salaros.com>
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*
-* @author    Zhmayev Yaroslav <salaros@salaros.com>
-* @copyright 2015-2016 Zhmayev Yaroslav
-* @license   The MIT License (MIT)
-*/
-
+ * Vtiger Web Services PHP Client Library
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015, Zhmayev Yaroslav <salaros@salaros.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @author    Zhmayev Yaroslav <salaros@salaros.com>
+ * @copyright 2015-2016 Zhmayev Yaroslav
+ * @license   The MIT License (MIT)
+ */
 namespace Salaros\Vtiger\VTWSCLib;
 
 use Salaros\Vtiger\VTWSCLib\WSClient;
 
 /**
-* Vtiger Web Services PHP Client Session class
-*
-* Class Entities
-* @package Salaros\Vtiger\VTWSCLib
-*/
+ * Vtiger Web Services PHP Client Session class
+ *
+ * Class Entities
+ * @package Salaros\Vtiger\VTWSCLib
+ */
 class Entities
 {
+
     private $wsClient;
 
     /**
@@ -59,17 +59,15 @@ class Entities
      * @return array   $select  The list of fields to select (defaults to SQL-like '*' - all the fields)
      * @return array  Entity data
      */
-    public function findOneByID($moduleName, $entityID, array $select = [ ])
+    public function findOneByID($moduleName, $entityID, array $select = [])
     {
         $entityID = $this->wsClient->modules->getTypedID($moduleName, $entityID);
-        $record = $this->wsClient->invokeOperation('retrieve', [ 'id' => $entityID ], 'GET');
+        $record = $this->wsClient->invokeOperation('retrieve', ['id' => $entityID], 'GET');
         if (!is_array($record)) {
             return null;
         }
 
-        return (empty($select))
-            ? $record
-            : array_intersect_key($record, array_flip($select));
+        return (empty($select)) ? $record : array_intersect_key($record, array_flip($select));
     }
 
     /**
@@ -79,12 +77,10 @@ class Entities
      * @return array   $select  The list of fields to select (defaults to SQL-like '*' - all the fields)
      * @return array  The matching record
      */
-    public function findOne($moduleName, array $params, array $select = [ ])
+    public function findOne($moduleName, array $params, array $select = [])
     {
         $entityID = $this->getID($moduleName, $params);
-        return (empty($entityID))
-            ? null
-            : $this->findOneByID($moduleName, $entityID, $select);
+        return (empty($entityID)) ? null : $this->findOneByID($moduleName, $entityID, $select);
     }
 
     /**
@@ -95,16 +91,14 @@ class Entities
      */
     public function getID($moduleName, array $params)
     {
-        $query = self::getQueryString($moduleName, $params, [ 'id' ], 1);
+        $query = self::getQueryString($moduleName, $params, ['id'], 1);
         $records = $this->wsClient->runQuery($query);
         if (false === $records || !is_array($records) || empty($records)) {
             return null;
         }
 
-        $record = $records[ 0 ];
-        return (!is_array($record) || !isset($record[ 'id' ]) || empty($record[ 'id' ]))
-            ? null
-            : $record[ 'id' ];
+        $record = $records[0];
+        return (!is_array($record) || !isset($record['id']) || empty($record['id'])) ? null : $record['id'];
     }
 
     /**
@@ -117,9 +111,7 @@ class Entities
     {
         $entityID = $this->getID($moduleName, $params);
         $entityIDParts = explode('x', $entityID, 2);
-        return (is_array($entityIDParts) && count($entityIDParts) === 2)
-            ? intval($entityIDParts[ 1 ])
-            : -1;
+        return (is_array($entityIDParts) && count($entityIDParts) === 2) ? intval($entityIDParts[1]) : -1;
     }
 
     /**
@@ -132,20 +124,20 @@ class Entities
     {
         if (!is_assoc_array($params)) {
             throw new WSException(
-                "You have to specify at least one search parameter (prop => value) 
+                    "You have to specify at least one search parameter (prop => value) 
                 in order to be able to create an entity"
             );
         }
 
         // Assign record to logged in user if not specified
-        if (!isset($params[ 'assigned_user_id' ])) {
+        if (!isset($params['assigned_user_id'])) {
             $currentUser = $this->wsClient->getCurrentUser();
-            $params[ 'assigned_user_id' ] = $currentUser[ 'id' ];
+            $params['assigned_user_id'] = $currentUser['id'];
         }
 
         $requestData = [
             'elementType' => $moduleName,
-            'element'     => json_encode($params)
+            'element' => json_encode($params)
         ];
 
         return $this->wsClient->invokeOperation('create', $requestData);
@@ -161,7 +153,7 @@ class Entities
     {
         if (!is_assoc_array($params)) {
             throw new WSException(
-                "You have to specify at least one search parameter (prop => value) 
+                    "You have to specify at least one search parameter (prop => value) 
                 in order to be able to update the entity(ies)"
             );
         }
@@ -189,7 +181,7 @@ class Entities
 
         $requestData = [
             'elementType' => $moduleName,
-            'element'     => json_encode($params)
+            'element' => json_encode($params)
         ];
 
         return $this->wsClient->invokeOperation('update', $requestData);
@@ -205,7 +197,7 @@ class Entities
     {
         // Preprend so-called moduleid if needed
         $entityID = $this->wsClient->modules->getTypedID($moduleName, $entityID);
-        return $this->wsClient->invokeOperation('delete', [ 'id' => $entityID ]);
+        return $this->wsClient->invokeOperation('delete', ['id' => $entityID]);
     }
 
     /**
@@ -217,11 +209,11 @@ class Entities
      * @return integer  $offset  Integer values to specify the offset of the query
      * @return array  The array containing matching entries or false if nothing was found
      */
-    public function findMany($moduleName, array $params, array $select = [ ], $limit = 0, $offset = 0)
+    public function findMany($moduleName, array $params, array $select = [], $limit = 0, $offset = 0)
     {
         if (!is_array($params) || (!empty($params) && !is_assoc_array($params))) {
             throw new WSException(
-                "You have to specify at least one search parameter (prop => value) 
+                    "You have to specify at least one search parameter (prop => value) 
                 in order to be able to retrieve entity(ies)"
             );
         }
@@ -247,20 +239,18 @@ class Entities
      */
     public function sync($modifiedTime = null, $moduleName = null, $syncType = null)
     {
-        $modifiedTime = (empty($modifiedTime))
-            ? strtotime('today midnight')
-            : intval($modifiedTime);
+        $modifiedTime = (empty($modifiedTime)) ? strtotime('today midnight') : intval($modifiedTime);
 
         $requestData = [
             'modifiedTime' => $modifiedTime
         ];
 
         if (!empty($moduleName)) {
-            $requestData[ 'elementType' ] = $moduleName;
+            $requestData['elementType'] = $moduleName;
         }
 
         if ($syncType) {
-            $requestData[ 'syncType' ] = $syncType;
+            $requestData['syncType'] = $syncType;
         }
 
         return $this->wsClient->invokeOperation('sync', $requestData, 'GET');
@@ -277,24 +267,22 @@ class Entities
      * @return integer  $offset  Integer values to specify the offset of the query
      * @return string   The query build out of the supplied parameters
      */
-    public static function getQueryString($moduleName, array $params, array $select = [ ], $limit = 0, $offset = 0)
+    public static function getQueryString($moduleName, array $params, array $select = [], $limit = 0, $offset = 0)
     {
         $criteria = array();
         $select = (empty($select)) ? '*' : implode(',', $select);
         $query = sprintf("SELECT %s FROM $moduleName", $select);
-        
+
         if (!empty($params)) {
             foreach ($params as $param => $value) {
-                $criteria[ ] = "{$param} LIKE '{$value}'";
+                $criteria[] = "{$param} LIKE '{$value}'";
             }
 
             $query .= sprintf(' WHERE %s', implode(" AND ", $criteria));
         }
 
         if (intval($limit) > 0) {
-            $query .= (intval($offset) > 0)
-                ? sprintf(" LIMIT %s, %s", intval($offset), intval($limit))
-                : sprintf(" LIMIT %s", intval($limit));
+            $query .= (intval($offset) > 0) ? sprintf(" LIMIT %s, %s", intval($offset), intval($limit)) : sprintf(" LIMIT %s", intval($limit));
         }
 
         return $query;

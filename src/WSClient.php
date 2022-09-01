@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Vtiger Web Services PHP Client Library
  *
@@ -29,7 +28,6 @@
  * @copyright 2015-2016 Zhmayev Yaroslav
  * @license   The MIT License (MIT)
  */
-
 namespace Salaros\Vtiger\VTWSCLib;
 
 use Salaros\Vtiger\VTWSCLib\Entities;
@@ -45,14 +43,14 @@ use Salaros\Vtiger\VTWSCLib\WSException;
  */
 class WSClient
 {
+
     private $session = null;
-    
     public $modules = null;
     public $entities = null;
 
     const USE_ACCESSKEY = 1;
     const USE_PASSWORD = 2;
-    
+
     /**
      * Class constructor
      * @param string $vtigerUrl  The URL of the remote WebServices server
@@ -77,16 +75,16 @@ class WSClient
             case self::USE_PASSWORD:
                 $loginOK = $this->session->loginPassword($username, $secret);
                 break;
-            
+
             default:
                 throw new WSException(sprintf('Unknown login mode: %s', $loginMode));
         }
 
         if (!$loginOK) {
             throw new WSException(sprintf(
-                'Failed to log into vTiger CRM (User: %s, URL: %s)',
-                $username,
-                $vtigerUrl
+                        'Failed to log into vTiger CRM (User: %s, URL: %s)',
+                        $username,
+                        $vtigerUrl
             ));
         }
     }
@@ -103,12 +101,12 @@ class WSClient
     {
         if (is_array($params) && !empty($params) && !is_assoc_array($params)) {
             throw new WSException(
-                "You have to specified a list of operation parameters, but apparently 
+                    "You have to specified a list of operation parameters, but apparently 
                 it's not an associative array ('prop' => value)!"
             );
         }
 
-        $params[ 'operation' ] = $operation;
+        $params['operation'] = $operation;
         return $this->session->sendHttpRequest($params, $method);
     }
 
@@ -127,11 +125,9 @@ class WSClient
     public function runQuery($query)
     {
         // Make sure the query ends with ;
-        $query = (strripos($query, ';') != strlen($query) - 1)
-            ? trim($query .= ';')
-            : trim($query);
+        $query = (strripos($query, ';') != strlen($query) - 1) ? trim($query .= ';') : trim($query);
 
-        return $this->invokeOperation('query', [ 'query' => $query ], 'GET');
+        return $this->invokeOperation('query', ['query' => $query], 'GET');
     }
 
     /**
