@@ -28,7 +28,7 @@
  * @copyright 2015-2016 Zhmayev Yaroslav
  * @license   The MIT License (MIT)
  */
-namespace Salaros\Vtiger\VTWSCLib;
+namespace Quatree\Vtiger\VTWSCLib;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -37,7 +37,7 @@ use GuzzleHttp\Exception\RequestException;
  * Vtiger Web Services PHP Client Session class
  *
  * Class Session
- * @package Salaros\Vtiger\VTWSCLib
+ * @package Quatree\Vtiger\VTWSCLib
  * @internal
  */
 class Session

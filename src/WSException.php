@@ -28,7 +28,7 @@
  * @copyright 2015-2016 Zhmayev Yaroslav
  * @license   The MIT License (MIT)
  */
-namespace Salaros\Vtiger\VTWSCLib;
+namespace Quatree\Vtiger\VTWSCLib;
 
 use \Exception;
 use \IteratorAggregate;
@@ -37,7 +37,7 @@ use \IteratorAggregate;
  * Vtiger Web Services PHP Client Exception class
  *
  * Class WSException
- * @package Salaros\Vtiger\VTWSCLib
+ * @package Quatree\Vtiger\VTWSCLib
  */
 class WSException extends Exception implements IteratorAggregate
 {

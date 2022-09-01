@@ -28,15 +28,15 @@
  * @copyright 2015-2016 Zhmayev Yaroslav
  * @license   The MIT License (MIT)
  */
-namespace Salaros\Vtiger\VTWSCLib;
+namespace Quatree\Vtiger\VTWSCLib;
 
-use Salaros\Vtiger\VTWSCLib\WSClient;
+use Quatree\Vtiger\VTWSCLib\WSClient;
 
 /**
  * Vtiger Web Services PHP Client Session class
  *
  * Class Entities
- * @package Salaros\Vtiger\VTWSCLib
+ * @package Quatree\Vtiger\VTWSCLib
  */
 class Entities
 {

@@ -28,18 +28,18 @@
  * @copyright 2015-2016 Zhmayev Yaroslav
  * @license   The MIT License (MIT)
  */
-namespace Salaros\Vtiger\VTWSCLib;
+namespace Quatree\Vtiger\VTWSCLib;
 
-use Salaros\Vtiger\VTWSCLib\Entities;
-use Salaros\Vtiger\VTWSCLib\Modules;
-use Salaros\Vtiger\VTWSCLib\Session;
-use Salaros\Vtiger\VTWSCLib\WSException;
+use Quatree\Vtiger\VTWSCLib\Entities;
+use Quatree\Vtiger\VTWSCLib\Modules;
+use Quatree\Vtiger\VTWSCLib\Session;
+use Quatree\Vtiger\VTWSCLib\WSException;
 
 /**
  * Vtiger Web Services PHP Client
  *
  * Class WSClient
- * @package Salaros\Vtiger\VTWSCLib
+ * @package Quatree\Vtiger\VTWSCLib
  */
 class WSClient
 {

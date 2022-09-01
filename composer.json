@@ -1,5 +1,5 @@
 {
-    "name"              : "salaros/vtwsclib-php",
+    "name"              : "quatree/vtwsclib-php",
     "license"           : "MIT",
     "description"       : "Vtiger Web Services PHP Client Library",
     "homepage"          : "https://github.com/salaros/vtwsclib-php",
@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Salaros\\Vtiger\\VTWSCLib\\": "src/"
+            "Quatree\\Vtiger\\VTWSCLib\\": "src/"
         }
     },
     "scripts": {
