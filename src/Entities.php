@@ -275,7 +275,13 @@ class Entities
 
         if (!empty($params)) {
             foreach ($params as $param => $value) {
+                if (is_array($value)) {
+                    $op = $value[0];
+                    $val = $value[1];
+                    $criteria[] = "{$param} {$op} '{$val}'";
+                } else {
                 $criteria[] = "{$param} LIKE '{$value}'";
+            }
             }
 
             $query .= sprintf(' WHERE %s', implode(" AND ", $criteria));
@@ -286,5 +292,31 @@ class Entities
         }
 
         return $query;
+    }
+
+    /**
+     *
+     * @param type $relateThis
+     * @param array $withTheseIds
+     */
+    public function setRelation($relateThisId, $withTheseId)
+    {
+        $postdata = array(
+            'sourceRecordId' => $relateThisId,
+            'relatedRecordId' => $withTheseId,
+        );
+        $result = $this->wsClient->invokeOperation('add_related', $postdata, 'POST');
+        return $result;
+}
+
+    public function getRelated($id, $relatedType = 'any')
+    {
+
+        $getdata = array(
+            'id' => $id,
+            'relatedType' => $relatedType,
+        );
+        $result = $this->wsClient->invokeOperation('retrieve_related', $getdata, 'POST');
+        var_dump($result);
     }
 }
