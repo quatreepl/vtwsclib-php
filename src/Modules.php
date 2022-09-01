@@ -105,4 +105,15 @@ class Modules
 
         return "{$type['idPrefix']}x{$entityID}";
     }
+    
+    public function getModuleById($moduleId){
+        $modules = $this->getAll();
+        foreach($modules as $m){
+            $module = $this->getOne($m['name']);                 
+            if(key_exists('idPrefix', $module) && $module['idPrefix'] == (string) $moduleId){
+                break; 
+            }
+        }
+        return $module;
+    }
 }
