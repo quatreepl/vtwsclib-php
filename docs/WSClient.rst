@@ -1,8 +1,8 @@
 -----------------------------------
-Salaros\\Vtiger\\VTWSCLib\\WSClient
+Quatree\\Vtiger\\VTWSCLib\\WSClient
 -----------------------------------
 
-.. php:namespace: Salaros\\Vtiger\\VTWSCLib
+.. php:namespace: Quatree\\Vtiger\\VTWSCLib
 
 .. php:class:: WSClient
 

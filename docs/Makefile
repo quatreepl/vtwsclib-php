@@ -11,8 +11,8 @@ BUILDDIR       = _build
 ROOT_DIR 		:= $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 PHP            = php
 PHPSRC         = ../src
-NAMESPACE	   = Salaros\\Vtiger\\VTWSCLib
-NAMESPACEPATH  = Salaros/Vtiger/VTWSCLib
+NAMESPACE	   = Quatree\\Vtiger\\VTWSCLib
+NAMESPACEPATH  = Quatree/Vtiger/VTWSCLib
 VENDORDIR     := $(abspath ../vendor )
 SPHPDOX        = $(VENDORDIR)/sphpdox/sphpdox
 
