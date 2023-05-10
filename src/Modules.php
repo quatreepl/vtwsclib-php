@@ -106,6 +106,13 @@ class Modules
         return "{$type['idPrefix']}x{$entityID}";
     }
     
+    public function getModuleByEntityID($entityID){
+        if (stripos((string) $entityID, 'x') == false) {
+            return false;
+        }
+        return "1";        
+    }
+    
     public function getModuleById($moduleId){
         $modules = $this->getAll();
         foreach($modules as $m){
@@ -116,4 +123,8 @@ class Modules
         }
         return $module;
     }
+    
+    public function getRelatedTypes($moduleName){
+        return $this->wsClient->invokeOperation('related_types', ['elementType' => $moduleName], 'GET');
+}
 }

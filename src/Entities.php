@@ -309,12 +309,13 @@ class Entities
         return $result;
     }
 
-    public function getRelated($id, $relatedType = 'any')
+    public function getRelated($id, $relatedType = 'any', $relatedLabel = false)
     {
-
+        $relatedLabel = $relatedLabel ? $relatedLabel : $relatedType;
         $getdata = array(
             'id' => $id,
             'relatedType' => $relatedType,
+            'relatedLabel' => $relatedLabel,
         );
         $result = $this->wsClient->invokeOperation('retrieve_related', $getdata, 'GET');
         return $result; 
